@@ -27,10 +27,10 @@ function AgregarDinero(selector) {
         }
     })
     // Enviar datos del formulario
-    const form = document.querySelector('#form-AgregarDinero input[type="submit"]');
-    form.addEventListener('click', function(e){
+    const formSubmit = document.querySelector('#form-AgregarDinero input[type="submit"]');
+    formSubmit.addEventListener('click', function(e){
         e.preventDefault();
-        form.style.display = 'none';
+        formSubmit.style.display = 'none';
         
         // Se obtienen los values de los selects
         let selects = [];
@@ -53,7 +53,7 @@ function AgregarDinero(selector) {
         dataPost.append('action','addIncome');
         dataPost.append('selects',selects);
         dataPost.append('specificAmount',specificAmount);
-        dataPost.append('amount',amount);
+        // dataPost.append('amount',amount); not used
         const url = './src/php/update.php';
         if(specificAmount != null){
             fetch(url, {
@@ -83,14 +83,14 @@ function AgregarDinero(selector) {
                     console.log(response);
                     alert('Ha ocurrido un error:\n'+response);
                 }
-                form.style.display = 'block';
+                formSubmit.style.display = 'block';
             })
             .catch(err => {
                 console.error('ERROR EN AJAX:\n'+ err );
                 alert('Ha ocurrido un error.');
             })
         }
-        form.style.display = 'block';
+        formSubmit.style.display = 'block';
     })
 
 }
@@ -119,13 +119,41 @@ function selectAccount(indexClass){
     '</div>';
 }
 function validateSA(specificAmount,totalAmount){
-    // SA ---> "Specific Amount"
-    var SA = specificAmount;
-    console.log('validateSA()->entrada:');
-    console.log(SA);
-    for (let i = 0; i < SA.length; i++) {
+    var SA = specificAmount; // SA ---> "Specific Amount"
+    var lenghtSA = SA.length;
+    console.log('Función validateSA()->entrada:',SA);
+
+    for (let i = 0; i < lenghtSA; i++) {
         if(SA[i] != '' && SA[i] != null){
-            // Its value is valid (not null or '')
+            //Se valida que no contenga letras.
+            let regExp = /[a-z]|[A-Z]/;
+            let resultadoRegExp = regExp.test(SA[i]);
+            let msg = 'Los montos solo pueden contener número positivos y los únicos símbolos que se pueden utilizar son "%" para el porcentaje y "," o "." para los decimales.';
+            if(resultadoRegExp){
+                alert(msg);
+                return null;
+            }
+            // Se valida que no tenga espacios en blanco.
+            regExp = /\s/;
+            resultadoRegExp = regExp.test(SA[i]);
+            msg = 'El monto no puede contener espacios en blanco.';
+            if(resultadoRegExp){
+                alert(msg);
+                return null;
+            }
+            // Se valida que no tenga símbolos diferentes a "%","." o ","
+            regExp = /\b%?[0-9]+((.|,){1}[0-9]+)(%?)\b/g;
+            console.log(regExp.test("120..,12d,312"))
+            resultadoRegExp = regExp.test("120");
+            resultadoRegExp = regExp.test(SA[i]);
+            msg = 'El monto no puede contener espacios en blanco.';
+            if(resultadoRegExp){
+                alert(msg);
+                return null;
+            }
+
+
+
             if(SA[i].includes('%')){
                 // el campo tiene un valor relativo(en porcentaje)
                 SA[i] = totalAmount / 100 * parseFloat(SA[i].replace('%', ''));// Se le da un valor absoluto según el porcentaje dado.
@@ -137,17 +165,14 @@ function validateSA(specificAmount,totalAmount){
     }
     // Se obtiene el monto restante para dividir entre los campos vacios.
     var totalAmountNoNull = 0;
-    for (let index = 0; index < SA.length; index++) {
+    for (let index = 0; index < lenghtSA; index++) {
         const element = SA[index];
         if(element != null && element != ''){
             totalAmountNoNull = totalAmountNoNull + SA[index];
         }  
     }
     var resto = totalAmount - totalAmountNoNull;
-    // if(resto < 0){
-    //     resto = 0;
-    //     alert(`La suma de los montos especificados para cada cuenta es mayor al monto total ($${totalAmount}).`);
-    // }
+
     //Se tratan los campos vacios (nulos)
     if(SA.includes('') || SA.includes(null)){
         /* Se procede a dar el valor que queda luego de restarle al total
@@ -156,7 +181,7 @@ function validateSA(specificAmount,totalAmount){
          */
         // Se cuentan la cantidad de campos null
         let nullIndex = []; //Arreglo con los índices de los campos nulos que hay en el arreglo SA.
-        for (let index = 0; index < SA.length; index++) {
+        for (let index = 0; index < lenghtSA; index++) {
             const element = SA[index];
             if(element == null || element == ''){
                 nullIndex[nullIndex.length] = index;
@@ -168,8 +193,7 @@ function validateSA(specificAmount,totalAmount){
             SA[nullIndex[index]] = nullAmounts;
         }
     }
-    console.log('validateSA()->salida:');
-    console.log(SA);
+    console.log('Función validateSA()->salida:',SA);
     // Se valida que todos los montos específicos juntos sean exactamente el 100% del monto total.
     let SAtotal = 0;
     SA.forEach(element => {
