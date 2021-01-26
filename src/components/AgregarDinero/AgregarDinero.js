@@ -45,6 +45,7 @@ function AgregarDinero(selector) {
         }
         let amount = document.getElementById('amount-input').value;
         specificAmount = validateSA(specificAmount,amount); //Se validan los montos especificos
+
         let dataPost = new FormData();
         console.log("SELECTS");
         console.log(selects);
@@ -54,40 +55,42 @@ function AgregarDinero(selector) {
         dataPost.append('specificAmount',specificAmount);
         dataPost.append('amount',amount);
         const url = './src/php/update.php';
-        fetch(url, {
-            method: 'POST',
-            body: dataPost
-        })
-        .then(response => {
-            if(response.ok){
-                return response.text();
-            }else{
-                throw 'Error en la llamada';
-            }
-        })
-        .then(response => {
-            if(response == 1){
-                console.log('addMoney exitoso');
-                reload();
-                let resumen = 'Se han agregado los siguientes ingresos:\n';
-                for (let index = 0; index < selects.length; index++) {
-                    const accountId = selects[index];
-                    const accountName = data.accounts.find(element => element.id == accountId).name;
-                    resumen = resumen + `- ${accountName}: $${numberFormat(specificAmount[index],2)}\n`;
+        if(specificAmount != null){
+            fetch(url, {
+                method: 'POST',
+                body: dataPost
+            })
+            .then(response => {
+                if(response.ok){
+                    return response.text();
+                }else{
+                    throw 'Error en la llamada';
                 }
-                resumen = resumen + `- Total: $${numberFormat(parseFloat(amount),2)}`;
-                alert('¡Operación exitosa!\n'+resumen);
-            }else{
-                console.log(response);
-                alert('Ha ocurrido un error:\n'+response);
-            }
-            form.style.display = 'block';
-        })
-        .catch(err => {
-            console.error('ERROR EN AJAX:\n'+ err );
-            alert('Ha ocurrido un error.');
-            form.style.display = 'block';
-        })
+            })
+            .then(response => {
+                if(response == 1){
+                    console.log('addMoney exitoso');
+                    reload();
+                    let resumen = 'Se han agregado los siguientes ingresos:\n';
+                    for (let index = 0; index < selects.length; index++) {
+                        const accountId = selects[index];
+                        const accountName = data.accounts.find(element => element.id == accountId).name;
+                        resumen = resumen + `- ${accountName}: $${numberFormat(specificAmount[index],2)}\n`;
+                    }
+                    resumen = resumen + `- Total: $${numberFormat(parseFloat(amount),2)}`;
+                    alert('¡Operación exitosa!\n'+resumen);
+                }else{
+                    console.log(response);
+                    alert('Ha ocurrido un error:\n'+response);
+                }
+                form.style.display = 'block';
+            })
+            .catch(err => {
+                console.error('ERROR EN AJAX:\n'+ err );
+                alert('Ha ocurrido un error.');
+                form.style.display = 'block';
+            })
+        }
     })
 
 }
@@ -141,10 +144,10 @@ function validateSA(specificAmount,totalAmount){
         }  
     }
     var resto = totalAmount - totalAmountNoNull;
-    if(resto < 0){
-        resto = 0;
-        alert(`La suma de los montos especificados para cada cuenta es mayor al monto total ($${totalAmount}).`);
-    }
+    // if(resto < 0){
+    //     resto = 0;
+    //     alert(`La suma de los montos especificados para cada cuenta es mayor al monto total ($${totalAmount}).`);
+    // }
     //Se tratan los campos vacios (nulos)
     if(SA.includes('') || SA.includes(null)){
         /* Se procede a dar el valor que queda luego de restarle al total
@@ -176,7 +179,9 @@ function validateSA(specificAmount,totalAmount){
         return SA;
     }else if(SAtotal < totalAmount){
         alert(`La suma de los montos especificados para cada cuenta es menor al monto total ($${totalAmount}).`);
+        return null;
     }else if(SAtotal > totalAmount){
         alert(`La suma de los montos especificados para cada cuenta es mayor al monto total ($${totalAmount}).`);
+        return null;
     }
 }
