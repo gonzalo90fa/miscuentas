@@ -88,9 +88,9 @@ function AgregarDinero(selector) {
             .catch(err => {
                 console.error('ERROR EN AJAX:\n'+ err );
                 alert('Ha ocurrido un error.');
-                form.style.display = 'block';
             })
         }
+        form.style.display = 'block';
     })
 
 }

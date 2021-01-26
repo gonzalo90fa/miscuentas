@@ -19,7 +19,7 @@ function addIncome(){
         $resultado = mysqli_query($connection,$sql);
         $resultadoArray = mysqli_fetch_array($resultado);
         $amount1 = $resultadoArray[0];
-        $newAmount = $amount1 + $amount;
+        $newAmount = $amount1 + $SA;
         // Se le suma a la reserva el monto dado.
         $sql = "UPDATE accounts_user1 SET reserve = $newAmount WHERE id = $accountId";
         mysqli_query($connection,$sql);
