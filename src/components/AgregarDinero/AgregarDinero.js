@@ -1,11 +1,19 @@
 "use strict"
-function AgregarDinero(selector) {
+function AddIncomeOrAddExpense(selector,action) {
     const selectHTML = selectAccount('_0');
+    var title = '';
+    if(action == 'addIncome'){
+        title = 'Agregar ingreso';
+    }else if(action == 'addExpense'){
+        title = 'Agregar gasto';
+    }else{
+        title = 'Ha ocurrido un error.';
+    }
     const style = '<!-- Style enlazado en head-->';
     const html = 
-        '<form id="form-AgregarDinero">'+
-            '<span class="closeSpan" onclick="closeFormAddMoney()">x</span>'+
-            '<h1>Agregar ingreso</h1>'+
+        '<form id="form-AddIncomeOrAddExpense">'+
+            '<span class="closeSpan" onclick="closeAddForm()">x</span>'+
+            `<h1>${title}</h1>`+
             '<label for="amount">Ingrese el monto</label>'+
             '<input type="number" name="amount" id="amount-input" step="0.01" placeholder="Sin separador de miles." required>'+
             '<div id="div-selects">'+
@@ -27,10 +35,10 @@ function AgregarDinero(selector) {
         }
     })
     // Enviar datos del formulario
-    const formSubmit = document.querySelector('#form-AgregarDinero input[type="submit"]');
+    const formSubmit = document.querySelector('#form-AddIncomeOrAddExpense input[type="submit"]');
     formSubmit.addEventListener('click', function(e){
-        e.preventDefault();
         formSubmit.style.display = 'none';
+        e.preventDefault();
         
         // Se obtienen los values de los selects
         let selects = [];
@@ -46,16 +54,19 @@ function AgregarDinero(selector) {
         let amount = document.getElementById('amount-input').value;
         specificAmount = validateSA(specificAmount,amount); //Se validan los montos especificos
 
+        if(selects.includes(null) || selects.includes('null')){
+            alert('Debe seleccionar una cuenta.');
+            selects = null;
+        }
         let dataPost = new FormData();
-        console.log("SELECTS");
-        console.log(selects);
+        console.log("SELECTS:",selects);
         // dataPost.append('accountId',accountId);
-        dataPost.append('action','addIncome');
+        dataPost.append('action',action);
         dataPost.append('selects',selects);
         dataPost.append('specificAmount',specificAmount);
         // dataPost.append('amount',amount); not used
         const url = './src/php/update.php';
-        if(specificAmount != null){
+        if(specificAmount != null && selects != null){
             fetch(url, {
                 method: 'POST',
                 body: dataPost
@@ -69,16 +80,26 @@ function AgregarDinero(selector) {
             })
             .then(response => {
                 if(response == 1){
-                    console.log('addMoney exitoso');
-                    reload();
-                    let resumen = 'Se han agregado los siguientes ingresos:\n';
+                    console.log('Operación exitosa');
+                    let palabra = '';
+                    if(action == 'addIncome'){
+                        palabra = 'ingresos';
+                    }else if(action == 'addExpense'){
+                        palabra = 'gastos';
+                    }else{
+                        palabra = '[Ha ocurrido un error]';
+                    }
+                    let resumen = `Se han agregado los siguientes ${palabra}:\n`;
                     for (let index = 0; index < selects.length; index++) {
                         const accountId = selects[index];
                         const accountName = data.accounts.find(element => element.id == accountId).name;
                         resumen = resumen + `- ${accountName}: $${numberFormat(specificAmount[index],2)}\n`;
                     }
-                    resumen = resumen + `- Total: $${numberFormat(parseFloat(amount),2)}`;
+                    resumen = resumen + `\nTotal: $${numberFormat(parseFloat(amount),2)}`;
                     alert('¡Operación exitosa!\n'+resumen);
+                    closeAddMenu();
+                    closeAddForm();
+                    reload();
                 }else{
                     console.log(response);
                     alert('Ha ocurrido un error:\n'+response);
@@ -89,12 +110,13 @@ function AgregarDinero(selector) {
                 console.error('ERROR EN AJAX:\n'+ err );
                 alert('Ha ocurrido un error.');
             })
+        }else{
+            formSubmit.style.display = 'block';
         }
-        formSubmit.style.display = 'block';
     })
 
 }
-function closeFormAddMoney(){
+function closeAddForm(){
     let divForms = document.getElementById('div-FormulariosAgregar');
     divForms.innerHTML = '';
     divForms.style.display = 'none';
@@ -123,12 +145,19 @@ function validateSA(specificAmount,totalAmount){
     var lenghtSA = SA.length;
     console.log('Función validateSA()->entrada:',SA);
 
+    // Se valida que el monto total no sea negativo.
+    
+    if(/-/.test(totalAmount)){
+        alert('El monto no puede ser negativo.');
+        return null;
+    }
+
     for (let i = 0; i < lenghtSA; i++) {
         if(SA[i] != '' && SA[i] != null){
             //Se valida que no contenga letras.
             let regExp = /[a-z]|[A-Z]/;
             let resultadoRegExp = regExp.test(SA[i]);
-            let msg = 'Los montos solo pueden contener número positivos y los únicos símbolos que se pueden utilizar son "%" para el porcentaje y "," o "." para los decimales.';
+            let msg = 'Los montos solo pueden contener número positivos y los únicos símbolos que se pueden utilizar son "%" para el porcentaje y/o "," o "." para los decimales.';
             if(resultadoRegExp){
                 alert(msg);
                 return null;
@@ -141,16 +170,25 @@ function validateSA(specificAmount,totalAmount){
                 alert(msg);
                 return null;
             }
-            // Se valida que no tenga símbolos diferentes a "%","." o ","
-            regExp = /\b%?[0-9]+((.|,){1}[0-9]+)(%?)\b/g;
-            console.log(regExp.test("120..,12d,312"))
-            resultadoRegExp = regExp.test("120");
+            // Se valida que no sea negativo.
+            regExp = /-/;
             resultadoRegExp = regExp.test(SA[i]);
-            msg = 'El monto no puede contener espacios en blanco.';
+            msg = 'El monto no puede ser negativo.';
             if(resultadoRegExp){
                 alert(msg);
                 return null;
             }
+            // Se valida que tenga el formato correcto.
+            // regExp = /\b%?[0-9]+((.|,){1}[0-9]+)(%?)\b/g;
+            // console.log(regExp.test("120..,12d,312"))
+            // resultadoRegExp = regExp.test("120");
+            // resultadoRegExp = regExp.test(SA[i]);
+            // msg = 'El monto no puede contener espacios en blanco.';
+            // if(resultadoRegExp){
+            //     alert(msg);
+            //     return null;
+            // }
+            // Hay que arreglar el patrón regExp
 
 
 

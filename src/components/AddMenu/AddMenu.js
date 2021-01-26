@@ -3,13 +3,11 @@ function AddMenu(){
     const container = document.getElementById('div-AddMenu');
     const html = 
         '<div>'+
-            // '<div id="div-closeSpan-AddMenu">'+
-                '<span id="closeSpan-AddMenu" onclick="closeAddMenu()">x</span>'+
-            // '</div>'+
+            '<span id="closeSpan-AddMenu" onclick="closeAddMenu()">x</span>'+
             '<ul>'+
-                '<li class="danger-bg">Gastos</li>'+
-                `<li onclick="AgregarDinero('#div-FormulariosAgregar')" class="good-bg">Ingresos</li>`+
+                `<li onclick="AddIncomeOrAddExpense('#div-FormulariosAgregar','addIncome')" class="good-bg">Ingresos</li>`+
                 '<li class="great-bg">Transferencia</li>'+
+                `<li onclick="AddIncomeOrAddExpense('#div-FormulariosAgregar','addExpense')" class="danger-bg">Gastos</li>`+
             '</ul>'+
         '</div>';
     container.innerHTML = html;

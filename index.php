@@ -10,6 +10,7 @@
     <!-- estilos particulares -->
     <link rel="stylesheet" href="src/components/Navigation/Navigation.css">
     <!-- estilos de componentes -->
+    <link rel="stylesheet" href="src/components/DatosPrincipales/DatosPrincipales.css"></link>
     <link rel="stylesheet" href="src/components/AgregarDinero/AgregarDinero.css"></link>
     <link rel="stylesheet" href="src/components/AddMenu/AddMenu.css">
 </head>

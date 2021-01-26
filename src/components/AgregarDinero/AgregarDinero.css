@@ -8,7 +8,7 @@
     background: rgba(0,0,0,0.65);
     z-index: 1;
 }
-#form-AgregarDinero{
+#form-AddIncomeOrAddExpense{
     display: flex;
     flex-flow:column;
     justify-content: space-evenly;
@@ -25,7 +25,7 @@
     position: relative;
     overflow: auto;
 }
-#form-AgregarDinero > h1{
+#form-AddIncomeOrAddExpense > h1{
     font-size: 1.75rem;
     text-align:center;
 }
@@ -63,15 +63,15 @@
 
 
 
-#form-AgregarDinero input[type="number"],
-#form-AgregarDinero select,
-#form-AgregarDinero input[type="text"]{
+#form-AddIncomeOrAddExpense input[type="number"],
+#form-AddIncomeOrAddExpense select,
+#form-AddIncomeOrAddExpense input[type="text"]{
     padding: 7.5px;
     font-size: 16px;
     border-radius: 5px;
     width: 100%;
     border: 1px grey solid;
 }
-#form-AgregarDinero select{
+#form-AddIncomeOrAddExpense select{
     margin-bottom: 10px;
 }

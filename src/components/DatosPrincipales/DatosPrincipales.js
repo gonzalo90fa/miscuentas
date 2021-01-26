@@ -42,7 +42,7 @@ function printDatosPrincipales(selector) {
         totalReserve = totalReserve + parseFloat(account.reserve);
     });
     totalReserve = numberFormat(totalReserve,2);
-    const style = '<link rel="stylesheet" href="src/components/DatosPrincipales/DatosPrincipales.css"></link>';
+    const style = '<!-- Style enlazado en head-->';
     const html = 
         '<div id="div-reserva">'+
             '<h2>Reserva total</h2>'+
