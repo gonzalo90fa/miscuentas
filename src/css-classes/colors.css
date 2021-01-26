@@ -1,0 +1,27 @@
+.danger-bg{
+    background: #f03d3d;
+}
+.danger-bg:active{
+    background: #dd3232;
+}
+.warning-bg{
+    background: yellow;
+}
+.good-bg{
+    background: #2bcc2b;
+}
+.good-bg:active{
+    background: #21b821;
+}
+.great-bg{
+    background: #38b8e2;
+}
+.great-bg:active{
+    background: #2ea4cc;
+}
+.neutral-bg{
+    background: orange;
+}
+.dark-bg{
+    background:black;
+}

@@ -1,0 +1,66 @@
+#div-datosPrincipales{
+    background-color: #282c34;
+    width: 100%;
+    min-height: 300px;
+    text-align:center;
+    position: relative;
+    background: #141E30;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to left, #243B55, #141E30);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to left, #243B55, #141E30); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    /* -webkit-box-shadow: 0px 5px 5px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 5px 5px 0px rgba(5, 4, 4, 0.75);
+    box-shadow: 0px 5px 5px 0px rgba(0,0,0,0.75); */
+    /* -webkit-box-shadow: inset 0px -5px 5px -2px rgba(0,0,0,0.75);
+    -moz-box-shadow: inset 0px -5px 5px -2px rgba(0,0,0,0.75);
+    box-shadow: inset 0px -5px 5px -2px rgba(0,0,0,0.75); */
+}
+#div-reserva{
+    padding: 5%;
+    display: flex;
+    flex-flow: column;
+}
+#div-reserva > h2{
+    font-size: 1.25rem;
+    font-weight: lighter;
+    color: #e6e6e6;
+}
+#div-reserva > .span-reserva{
+    color: #ffffff;
+    font-size: 2.1875rem;
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+#div-reserva > .verRegistros{
+    color: white;
+    font-size: 1rem;
+}
+#tabla-DatosPrincipales{
+    width: 100%;
+    height: 120px;
+    display: block;
+    overflow-y:scroll;
+    border-top: 0.5px #575757 solid;
+    border-bottom: 0.5px #575757 solid;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin-top: 25px;
+    background-color: rgba(255,255,255,0.025);
+}
+#tabla-DatosPrincipales tr:active{
+    background-color: rgba(255, 255, 255, 0.025);
+}
+#tabla-DatosPrincipales tr{
+    height: 35px;
+}
+#tabla-DatosPrincipales td{
+    border: none;
+}
+#tabla-DatosPrincipales td._0{
+    width: 35%;
+}
+#tabla-DatosPrincipales td._1{
+    width: 30%
+}
+#tabla-DatosPrincipales td._2{
+    width: 30%; 
+}
