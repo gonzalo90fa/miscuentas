@@ -8,10 +8,22 @@ var data = {
             reserve: 0
         }
     ],
-    totalReserve: '0,00'
-    
+    totalReserve: '0,00',
+    records: [
+        {
+            id: 1,
+            operation: 'expense',
+            affectedAccounts: ['Cuenta 1','Cuenta 2','Cuenta 3'],
+            amounts: [0,0,0],
+            date: '25-06-2020 08:49',
+            origin: 'Food',
+            note: 'Shopping for food'
+        }
+    ]
 }
-DatosPrincipales('#div-datosPrincipales');
+DatosPrincipales('#div-datosPrincipales'); //Se cargan las cuentas
+loadRecords(); //Se cargan los registros de operaciones
 function reload(){
     DatosPrincipales('#div-datosPrincipales');
+    loadRecords();
 }

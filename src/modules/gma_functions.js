@@ -68,7 +68,7 @@ function numberFormat(number, cantDecimales = false, roundDecimals = true, punto
     
      // number --> entrada
     //Cantidad de decimales y redondeo
-    let n = number;
+    let n = parseFloat(number);
     if(cantDecimales != false){
         if(roundDecimals == true){
             n = n.toFixed(2);

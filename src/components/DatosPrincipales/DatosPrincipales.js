@@ -16,8 +16,7 @@ function DatosPrincipales(selector) {
         }
     })
     .then(response => {
-        console.log('Respuesta');
-        console.log(response);
+        console.log("loadAccounts:",response);
         data.accounts = response;
         printDatosPrincipales(selector)
     })
