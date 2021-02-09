@@ -9,7 +9,7 @@ function AddIncomeOrAddExpense(selector,action) {
     }else{
         title = 'Ha ocurrido un error.';
     }
-    const style = '<!-- Style enlazado en head-->';
+    // Formualrio para agregar un ingreso o gasto.
     const html = 
         '<form id="form-AddIncomeOrAddExpense">'+
             '<span class="closeSpan" onclick="closeAddForm()">x</span>'+
@@ -22,7 +22,7 @@ function AddIncomeOrAddExpense(selector,action) {
             '<div id="btnAddSelect"><img src="./src/media/img/iconos/add-white-18dp.svg"></div>'+
             '<input type="submit" class="submitOk good-bg" value="Ok">'+
         '</form>';
-    document.querySelector(selector).innerHTML = style+html;
+    document.querySelector(selector).innerHTML = html;
     let btnAddSelect = document.getElementById('btnAddSelect');
     btnAddSelect.addEventListener('click',()=>{
         let divSelects = document.querySelector('#div-selects');
@@ -59,14 +59,15 @@ function AddIncomeOrAddExpense(selector,action) {
             selects = null;
         }
         let dataPost = new FormData();
-        console.log("SELECTS:",selects);
         // dataPost.append('accountId',accountId);
         dataPost.append('action',action);
         dataPost.append('selects',selects);
         dataPost.append('specificAmount',specificAmount);
-        // dataPost.append('amount',amount); not used
+        dataPost.append('origin',"Prueba");
+        dataPost.append.apply('note',"Esto es un registro de prueba.");
         const url = './src/php/update.php';
         if(specificAmount != null && selects != null){
+            // Se agrega el ingreso o gasto.
             fetch(url, {
                 method: 'POST',
                 body: dataPost
@@ -109,12 +110,11 @@ function AddIncomeOrAddExpense(selector,action) {
             .catch(err => {
                 console.error('ERROR EN AJAX:\n'+ err );
                 alert('Ha ocurrido un error.');
-            })
+            });
         }else{
             formSubmit.style.display = 'block';
         }
-    })
-
+    });
 }
 function closeAddForm(){
     let divForms = document.getElementById('div-FormulariosAgregar');
@@ -147,7 +147,7 @@ function selectAccount(indexClass){
 }
 function validateSA(specificAmount,totalAmount){
     /**
-     * Esta funcion valida y reparte los montos a las respectivas cuentas.
+     * Esta funcion valida y reparte los montos específicos a las respectivas cuentas.
      */
     var SA = specificAmount; // SA ---> "Specific Amount"
     var lenghtSA = SA.length;
@@ -197,8 +197,6 @@ function validateSA(specificAmount,totalAmount){
             //     return null;
             // }
             // Hay que arreglar el patrón regExp
-
-
 
             if(SA[i].includes('%')){
                 // el campo tiene un valor relativo(en porcentaje)

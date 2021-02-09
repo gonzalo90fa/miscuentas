@@ -9,14 +9,12 @@ if($action == 'addIncome'){
 function addIncomeOrAddExpense($op){
     $selects = explode(",", $_POST['selects']);
     $specificAmount = explode(",", $_POST['specificAmount']);
-    // $amount = $_POST['amount']; not used
     global $connection;
     // Se obtiene la reserva actual
     $lengthSelects = count($selects);
     for ($i=0; $i < $lengthSelects; $i++) { 
         $SA = $specificAmount[$i]; //SA ---> "Specific Amount"
 
-        
         $accountId = $selects[$i];
         $sql = "SELECT reserve FROM accounts_user1 WHERE id = $accountId";
         $resultado = mysqli_query($connection,$sql);
@@ -35,6 +33,24 @@ function addIncomeOrAddExpense($op){
         mysqli_query($connection,$sql);
     }
     if($i == $lengthSelects){
+        // Se guarda el registro de la operación.
+        if($op == 'addIncome'){
+            $operation = 'income';
+        }else if($op == 'addExpense'){
+            $operation = 'expense';
+        }
+        $affectedAccounts = $selects;
+        $amounts = $specificAmount;
+        $date = date_create();
+        $date = date_format($date,"d/m/Y H:i");
+        $record[0] = $operation; // Operación realizada
+        $record[1] = $affectedAccounts; // Cuentas afectadas
+        $record[2] = $amounts; // Montos
+        $record[3] = $date; // Fecha
+        $record[4] = $_POST['origin']; // Origen de la operación
+        $record[5] = $_POST['note']; // Nota dejada por el usuario
+        require("./add.php");
+        addRecord($record);
         echo 1;
     }else{
         echo 'Ha ocurrido un error en una o varias consultas.';
