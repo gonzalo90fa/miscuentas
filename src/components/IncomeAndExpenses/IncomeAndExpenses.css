@@ -65,7 +65,8 @@
 
 #form-AddIncomeOrAddExpense input[type="number"],
 #form-AddIncomeOrAddExpense select,
-#form-AddIncomeOrAddExpense input[type="text"]{
+#form-AddIncomeOrAddExpense input[type="text"],
+#form-AddIncomeOrAddExpense textarea{
     padding: 7.5px;
     font-size: 16px;
     border-radius: 5px;
@@ -74,4 +75,7 @@
 }
 #form-AddIncomeOrAddExpense select{
     margin-bottom: 10px;
+}
+#form-AddIncomeOrAddExpense input[type="submit"]{
+    margin-top: 1rem;
 }

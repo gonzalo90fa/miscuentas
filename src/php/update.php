@@ -39,19 +39,21 @@ function addIncomeOrAddExpense($op){
         }else if($op == 'addExpense'){
             $operation = 'expense';
         }
-        $affectedAccounts = $selects;
         $amounts = $specificAmount;
         $date = date_create();
         $date = date_format($date,"d/m/Y H:i");
         $record[0] = $operation; // Operación realizada
-        $record[1] = $affectedAccounts; // Cuentas afectadas
+        $record[1] = $_POST['affectedAccounts'];; // Cuentas afectadas
         $record[2] = $amounts; // Montos
         $record[3] = $date; // Fecha
         $record[4] = $_POST['origin']; // Origen de la operación
         $record[5] = $_POST['note']; // Nota dejada por el usuario
         require("./add.php");
-        addRecord($record);
-        echo 1;
+        if(addRecord($record)){
+            echo 1;
+        }else{
+            echo "Ha ocurrido un error al guardar el registro.";
+        }
     }else{
         echo 'Ha ocurrido un error en una o varias consultas.';
     }

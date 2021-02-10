@@ -11,17 +11,19 @@ function AddIncomeOrAddExpense(selector,action) {
     }
     // Formualrio para agregar un ingreso o gasto.
     const html = 
-        '<form id="form-AddIncomeOrAddExpense">'+
-            '<span class="closeSpan" onclick="closeAddForm()">x</span>'+
-            `<h1>${title}</h1>`+
-            '<label for="amount">Ingrese el monto</label>'+
-            '<input type="number" name="amount" id="amount-input" step="0.01" placeholder="Sin separador de miles." required>'+
-            '<div id="div-selects">'+
-                selectHTML+
-            '</div>'+
-            '<div id="btnAddSelect"><img src="./src/media/img/iconos/add-white-18dp.svg"></div>'+
-            '<input type="submit" class="submitOk good-bg" value="Ok">'+
-        '</form>';
+        `<form id="form-AddIncomeOrAddExpense">
+            <span class="closeSpan" onclick="closeAddForm()">x</span>
+            <h1>${title}</h1>
+            <label for="amount">Ingrese el monto</label>
+            <input type="number" name="amount" id="amount-input" step="0.01" placeholder="Sin separador de miles." required>
+            <div id="div-selects">${selectHTML}</div>
+            <div id="btnAddSelect"><img src="./src/media/img/iconos/add-white-18dp.svg"></div>
+            <label for="origin">Ingrese el origen</label>
+            <input type="text" name="origin" id="origin-input" placeholder="Ej: Supermercado, Farmacia, Alquiler, etc" />
+            <label for="origin">Nota</label>
+            <textarea name="note" id="note-input" placeholder="Alguna nota que desee dejar"></textarea>
+            <input type="submit" class="submitOk good-bg" value="Ok">
+        </form>`;
     document.querySelector(selector).innerHTML = html;
     let btnAddSelect = document.getElementById('btnAddSelect');
     btnAddSelect.addEventListener('click',()=>{
@@ -35,16 +37,16 @@ function AddIncomeOrAddExpense(selector,action) {
         }
     })
     // Enviar datos del formulario
-    const formSubmit = document.querySelector('#form-AddIncomeOrAddExpense input[type="submit"]');
-    formSubmit.addEventListener('click', function(e){
-        formSubmit.style.display = 'none';
+    const btnSubmit = document.querySelector('#form-AddIncomeOrAddExpense input[type="submit"]');
+    btnSubmit.addEventListener('click', function(e){
+        btnSubmit.style.display = 'none';
         e.preventDefault();
-        
         // Se obtienen los values de los selects
         let selects = [];
         let specificAmount = [];
         let cantSelects = document.querySelector('#div-selects').childElementCount;
-        // se recorren todos los grupos de select y campo de texto para obtener sus valores.
+        // Se recorren todos los grupos de select y campo de texto para obtener sus valores
+        // (se obtendrán las cuentas a afectar y los montos para cada una).
         for(let i = 0;i < cantSelects;i++){
             let select = document.querySelector(`.selectAccount-input._${i}`);
             let accountId = select.options[select.selectedIndex].value;
@@ -53,18 +55,30 @@ function AddIncomeOrAddExpense(selector,action) {
         }
         let amount = document.getElementById('amount-input').value;
         specificAmount = validateSA(specificAmount,amount); //Se validan los montos especificos
-
+        // Se verifica que se hayan seleccionado las cuentas a afectar.
         if(selects.includes(null) || selects.includes('null')){
             alert('Debe seleccionar una cuenta.');
             selects = null;
         }
+        // Se obtienen los nombres de las cuentas según las id de las mismas.
+        if(selects != null){
+            var affectedAccounts = [];
+            selects.forEach( (accountId,i) => {
+                affectedAccounts[i] = data.accounts.find(element => element.id == accountId).name;
+            });
+        }
+        //Se obtienen el origen y la nota de la operación.
+        var origin = document.getElementById('origin-input').value;
+        var note = document.getElementById('note-input').value;
+
         let dataPost = new FormData();
         // dataPost.append('accountId',accountId);
         dataPost.append('action',action);
         dataPost.append('selects',selects);
+        dataPost.append('affectedAccounts',affectedAccounts);
         dataPost.append('specificAmount',specificAmount);
-        dataPost.append('origin',"Prueba");
-        dataPost.append.apply('note',"Esto es un registro de prueba.");
+        dataPost.append('origin',origin);
+        dataPost.append('note',note);
         const url = './src/php/update.php';
         if(specificAmount != null && selects != null){
             // Se agrega el ingreso o gasto.
@@ -105,21 +119,16 @@ function AddIncomeOrAddExpense(selector,action) {
                     console.log(response);
                     alert('Ha ocurrido un error:\n'+response);
                 }
-                formSubmit.style.display = 'block';
+                btnSubmit.style.display = 'block';
             })
             .catch(err => {
                 console.error('ERROR EN AJAX:\n'+ err );
                 alert('Ha ocurrido un error.');
             });
         }else{
-            formSubmit.style.display = 'block';
+            btnSubmit.style.display = 'block';
         }
     });
-}
-function closeAddForm(){
-    let divForms = document.getElementById('div-FormulariosAgregar');
-    divForms.innerHTML = '';
-    divForms.style.display = 'none';
 }
 function selectAccount(indexClass){
     /* 
@@ -252,4 +261,9 @@ function validateSA(specificAmount,totalAmount){
         alert(`La suma de los montos especificados para cada cuenta es mayor al monto total ($${totalAmount}).`);
         return null;
     }
+}
+function closeAddForm(){
+    let divForms = document.getElementById('div-FormulariosAgregar');
+    divForms.innerHTML = '';
+    divForms.style.display = 'none';
 }

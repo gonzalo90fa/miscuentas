@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 09-02-2021 a las 18:52:21
+-- Tiempo de generación: 10-02-2021 a las 17:49:53
 -- Versión del servidor: 10.1.38-MariaDB
 -- Versión de PHP: 7.3.2
 
@@ -40,11 +40,11 @@ CREATE TABLE `accounts_user1` (
 --
 
 INSERT INTO `accounts_user1` (`id`, `name`, `description`, `reserve`) VALUES
-(1, 'Efectivo', 'Dinero en efectivo (billetera y demás).', 9110),
-(2, 'Mercado Pago', 'Dinero en Mercado Pago', 11527.9),
-(3, 'Plazo fijo', 'Plazo fijo con fecha 20. Suma $629,50 / mes.', 21400),
-(4, 'Banco Patagonia', '-', 12500),
-(5, 'Banco Galicia', '-', 10750);
+(1, 'Efectivo', 'Dinero en efectivo (billetera y demás).', 3162.67),
+(2, 'Mercado Pago', 'Dinero en Mercado Pago', 18597.9),
+(3, 'Plazo fijo', 'Plazo fijo con fecha 20. Suma $629,50 / mes.', 21231.7),
+(4, 'Banco Patagonia', '-', 12416.7),
+(5, 'Banco Galicia', '-', 11341);
 
 -- --------------------------------------------------------
 
@@ -69,7 +69,8 @@ CREATE TABLE `records_user1` (
 INSERT INTO `records_user1` (`id`, `operation`, `affectedAccounts`, `amounts`, `date`, `origin`, `note`) VALUES
 (1, 'income', 'Efectivo,Mercado Pago', '11700,10000', '02/09/2020 08:38', 'Página web Corralón', '-'),
 (2, 'expense', 'Efectivo', '5260.32', '28/02/2021 17:23', 'Batería computadora', '-'),
-(3, 'transfer', 'Efectivo,Mercado Pago', '3500,4750', '19/08/20 11:00', 'Banco Patagonia', 'Se sacó dinero del banco y parte se cargó a Mercado Pago.');
+(3, 'transfer', 'Efectivo,Mercado Pago', '3500,4750', '19/08/20 11:00', 'Banco Patagonia', 'Se sacó dinero del banco y parte se cargó a Mercado Pago.'),
+(4, 'income', 'Efectivo,Mercado Pago,Banco Patagonia', '2500,7000,500', '10/02/2021 15:15', 'Página Anubis Insumos', '-');
 
 --
 -- Índices para tablas volcadas

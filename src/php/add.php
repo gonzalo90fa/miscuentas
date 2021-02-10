@@ -7,15 +7,8 @@ function addRecord($record){
     $resultado = mysqli_query($connection,$sql);
     $numRegistros = mysqli_num_rows($resultado);
     $newId = $numRegistros + 1;
-    $sql = "INSERT INTO records_user$userId VALUES(
-        $newId,
-        ".$record[0].", 
-        ".$record[1].", 
-        ".$record[2].",
-        ".$record[3].",
-        ".$record[4].",
-        ".$record[5].")";
+    $sql = "INSERT INTO records_user$userId VALUES($newId,'".$record[0]."','".$record[1]."','".implode($record[2],',')."','".$record[3]."','".$record[4]."','".$record[5]."')";
     mysqli_query($connection,$sql);
-    // echo "Número de filas: ".$numRegistros."\n";
+    return true;
 }
 ?>

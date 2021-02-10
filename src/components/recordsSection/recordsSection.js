@@ -63,7 +63,7 @@ function printRecords() {
         var recordHTML = ''; //html del registro que se concatenará con los otros registros para formar "recordsHTML".
         if(op == 'income'){
             recordHTML = `
-                <div class="record income good-bg">
+                <div class="record income">
                     <h1>$${numberFormat(totalAmount,2)} agregados</h1>
                     <div class="div-info" id="record${record.id}">
                         <h2>Cuentas afectadas</h2>
@@ -82,7 +82,7 @@ function printRecords() {
             `;
         }else if(op == 'transfer'){
             recordHTML = `
-                <div class="record transfer great-bg">
+                <div class="record transfer">
                     <h1>$${numberFormat(totalAmount,2)} transferidos de "${record.origin}"</h1>
                     <div class="div-info" id="record${record.id}">
                         <h2>Destino/s</h2>
@@ -99,7 +99,7 @@ function printRecords() {
             `;
         }else if(op == 'expense'){
             recordHTML = `
-                <div class="record expense danger-bg">
+                <div class="record expense">
                     <h1>$${numberFormat(totalAmount,2)} quitados</h1>
                     <div class="div-info" id="record${record.id}">
                         <h2>Cuentas afectadas</h2>
