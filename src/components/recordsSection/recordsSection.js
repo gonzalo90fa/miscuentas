@@ -5,6 +5,7 @@ function showRecordsSection(selector){
         <section id="recordsSection">
             <header>
                 <span class="icon-arrow-left2" onclick="hideSection()"></span>
+                <span class="icon-arrow-right2" onclick="hideSection()"></span>
                 <h1>Registros</h1>
             </header>
             <div id="records"></div>

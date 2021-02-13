@@ -1,18 +1,22 @@
 "use strict"
 function AddIncomeOrAddExpense(selector,action) {
-    const selectHTML = selectAccount('_0');
+    const selectHTML = selectAccount();
     var title = '';
+    var className = '';
     if(action == 'addIncome'){
         title = 'Agregar ingreso';
+        className = 'income_form';
     }else if(action == 'addExpense'){
         title = 'Agregar gasto';
+        className = 'expense_form';
     }else{
         title = 'Ha ocurrido un error.';
+        className = 'Ha ocurrido un error.';
     }
     // Formualrio para agregar un ingreso o gasto.
     const html = 
-        `<form id="form-AddIncomeOrAddExpense">
-            <span class="closeSpan" onclick="closeAddForm()">x</span>
+        `<form class="ITE_Forms ${className}" id="form-AddIncomeOrAddExpense">
+            <span class="closeSpan" onclick="close_ITE_form()">x</span>
             <h1>${title}</h1>
             <label for="amount">Ingrese el monto</label>
             <input type="number" name="amount" id="amount-input" step="0.01" placeholder="Sin separador de miles." required>
@@ -30,7 +34,13 @@ function AddIncomeOrAddExpense(selector,action) {
         let divSelects = document.querySelector('#div-selects');
         let cantDivSelect = divSelects.childElementCount;
         if(cantDivSelect < data.accounts.length){
-            divSelects.innerHTML += selectAccount('_'+cantDivSelect);
+            const selectAccountConf = {
+                name:'selectAccount',
+                indexClass: '_'+cantDivSelect,
+                selectText: 'Seleccione la cuenta',
+                accountAmount: true
+            };
+            divSelects.innerHTML += selectAccount(selectAccountConf);
             console.log('Se ha agregado un select.');
         }else{
             alert('No tienes más cuentas que agregar.');
@@ -112,8 +122,8 @@ function AddIncomeOrAddExpense(selector,action) {
                     }
                     resumen = resumen + `\nTotal: $${numberFormat(parseFloat(amount),2)}`;
                     alert('¡Operación exitosa!\n'+resumen);
-                    closeAddMenu();
-                    closeAddForm();
+                    close_ITE_menu();
+                    close_ITE_form();
                     reload();
                 }else{
                     console.log(response);
@@ -130,13 +140,30 @@ function AddIncomeOrAddExpense(selector,action) {
         }
     });
 }
-function selectAccount(indexClass){
+function selectAccount(properties = {
+                            id:'',
+                            name:'selectAccount',
+                            indexClass: '_0',
+                            selectText: 'Seleccione la cuenta',
+                            accountAmount: true
+                        }){
     /* 
-    * Retorna String html con un <select> con las cuentas del usuario.
-    * "indexClass" es un valor para la clase del elemento <select>, para usarlo como un identificador numérico,
-    * por ejemplo: "_0","_1","_2", etc.
+    * Retorna un elemento HTML "<select>" con las cuentas del usuario.
+    * --- Parámetros ---
+    *   properties.id:
+    *       Valor para el atributo id del elemento <select>.
+    *   properties.name:
+    *       Valor para el atributo name del elemento <select>.
+    *   properties.indexClass:
+    *       Es un valor para la clase del elemento <select>, para usarlo como un identificador numérico,
+    *       por ejemplo: "_0","_1","_2", etc. Esto es debido a que se permite al usuario seleccionar más de una cuenta y podrá ver varios <select>.
+    *   properties.selectText:
+    *       Texto que se mostrará en la etiqueta <label> del elemento <select>
+    *   properties.accountAmount:
+    *       Valor por defecto: true. Si es así se colocará abajo del elemento <select> un input para indicar el monto específico
+    *       para esa cuenta.
     */
-    document.getElementById('div-FormulariosAgregar').style.display = 'flex';
+    document.getElementById('div-ITE_forms').style.display = 'flex';
     let accounts = '';
     if(data.accounts.length < 1){
         accounts = '<option value="null">Aún no tienes ninguna cuenta.</option>';
@@ -145,14 +172,22 @@ function selectAccount(indexClass){
             accounts = accounts + `<option value="${account.id}">${account.name}</option>`;
         })
     }
-    return '<div class="div-select">'+
-        '<label for="selectAccount" required>Seleccione la cuenta</label>'+
-        `<select name="selectAccount" class="selectAccount-input ${indexClass}">`+
-            '<option value="null">----</option>'+
-            accounts+
-        '</select>'+
-        `<input type="text" class="accountAmount-input ${indexClass}" placeholder="Cantidad o porcentaje de monto total"></input>`+
-    '</div>';
+    var accountAmount = '';
+    if(properties.accountAmount){
+        accountAmount = `
+            <input type="text" class="accountAmount-input ${properties.indexClass}" placeholder="Cantidad o porcentaje del monto total" />
+        `;
+    }
+
+    return `
+    <div class="div-select">
+        <label for="${properties.name}">${properties.selectText}</label>
+        <select name="${properties.name}" class="selectAccount-input ${properties.indexClass}" id="${properties.id}">
+            <option value="null">----</option>
+            ${accounts}
+        </select>
+        ${accountAmount}
+    </div>`;
 }
 function validateSA(specificAmount,totalAmount){
     /**
@@ -195,18 +230,6 @@ function validateSA(specificAmount,totalAmount){
                 alert(msg);
                 return null;
             }
-            // Se valida que tenga el formato correcto.
-            // regExp = /\b%?[0-9]+((.|,){1}[0-9]+)(%?)\b/g;
-            // console.log(regExp.test("120..,12d,312"))
-            // resultadoRegExp = regExp.test("120");
-            // resultadoRegExp = regExp.test(SA[i]);
-            // msg = 'El monto no puede contener espacios en blanco.';
-            // if(resultadoRegExp){
-            //     alert(msg);
-            //     return null;
-            // }
-            // Hay que arreglar el patrón regExp
-
             if(SA[i].includes('%')){
                 // el campo tiene un valor relativo(en porcentaje)
                 SA[i] = totalAmount / 100 * parseFloat(SA[i].replace('%', ''));// Se le da un valor absoluto según el porcentaje dado.
@@ -262,8 +285,8 @@ function validateSA(specificAmount,totalAmount){
         return null;
     }
 }
-function closeAddForm(){
-    let divForms = document.getElementById('div-FormulariosAgregar');
+function close_ITE_form(){
+    let divForms = document.getElementById('div-ITE_forms');
     divForms.innerHTML = '';
     divForms.style.display = 'none';
 }

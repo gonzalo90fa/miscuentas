@@ -21,6 +21,7 @@ var data = {
         }
     ]
 }
+Navigation();
 DatosPrincipales('#div-datosPrincipales'); //Se cargan las cuentas
 loadRecords(); //Se cargan los registros de operaciones
 function reload(){

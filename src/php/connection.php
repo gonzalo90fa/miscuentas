@@ -12,6 +12,6 @@ $db = 'gma-mi-billetera';
 $connection = mysqli_connect($host,$user,$pass,$db);
 mysqli_set_charset($connection,'utf8');
 if(!$connection){
-    echo 'Error al cargar :(';
+    echo 'Error de conexión a la base de datos.';
 }
 ?>

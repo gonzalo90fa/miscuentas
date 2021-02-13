@@ -11,36 +11,30 @@
     <link rel="stylesheet" href="src/css-classes/colors.css">
     <!-- estilos librerías -->
     <link rel="stylesheet" href="src/libraries/icomoon/style.css">
+    <link rel="stylesheet" href="src/libraries/animate.min.css">
     <!-- estilos particulares -->
     <link rel="stylesheet" href="src/components/Navigation/Navigation.css">
     <!-- estilos de componentes -->
     <link rel="stylesheet" href="src/components/DatosPrincipales/DatosPrincipales.css"></link>
-    <link rel="stylesheet" href="src/components/IncomeAndExpenses/IncomeAndExpenses.css"></link>
-    <link rel="stylesheet" href="src/components/AddMenu/AddMenu.css">
+    <link rel="stylesheet" href="src/components/ITE_Components/ITE_menu/ITE_menu.css">
+    <link rel="stylesheet" href="src/components/ITE_Components/ITE.css"></link>
+    
     <!-- estilos secciones -->
     <link rel="stylesheet" href="src/components/recordsSection/recordsSection.css">
 </head>
 <body>
-    <header class="mainHeader">
-        <nav class="Navigation">
-            <ul>
-               <li><img class="navIcon" src="./src/media/img/iconos/home-white-18dp.svg" alt="icon_home"></img></li>
-               <li onclick="showRecordsSection('#div-sections')"><img class="navIcon" src="./src/media/img/iconos/sync_alt-white-18dp.svg" alt="icon_records"></img></li>
-               <li onclick="AddMenu()"><img class="navIcon good-bg" id="navIcon_2" src="./src/media/img/iconos/add-white-18dp.svg" alt="icon_add"></img></li>
-               <li><img class="navIcon" src="./src/media/img/iconos/signal_cellular_alt-white-18dp.svg" alt="icon_analytics"></img></li>
-               <li><img class="navIcon" src="./src/media/img/iconos/settings-white-18dp.svg" alt="icon_settings"></img></li>
-            </ul>
-        </nav>
-    </header>
+    <div id="div-header"></div>
     <div id="div-datosPrincipales"></div>
-    <div id="div-AddMenu"></div>
-    <div id="div-FormulariosAgregar"></div>
+    <div id="div-ITE_menu"></div>
+    <div id="div-ITE_forms"></div>
     <div id="div-sections"></div>
     
     <script src="src/modules/gma_functions.js"></script>
+    <script src="src/components/Navigation/Navigation.js"></script>
     <script src="src/components/DatosPrincipales/DatosPrincipales.js"></script>
-    <script src="src/components/AddMenu/AddMenu.js"></script>
-    <script src="src/components/IncomeAndExpenses/IncomeAndExpenses.js"></script>
+    <script src="src/components/ITE_Components/ITE_menu/ITE_menu.js"></script>
+    <script src="src/components/ITE_Components/ITE.js"></script>
+    <script src="src/components/ITE_Components/Transfer.js"></script>
     <script src="src/components/recordsSection/recordsSection.js"></script>
     <script src="src/App.js"></script>
 </body>

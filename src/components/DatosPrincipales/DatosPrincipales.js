@@ -41,16 +41,15 @@ function printDatosPrincipales(selector) {
         totalReserve = totalReserve + parseFloat(account.reserve);
     });
     totalReserve = numberFormat(totalReserve,2);
-    const style = '<!-- Style enlazado en head-->';
-    const html = 
-        '<div id="div-reserva">'+
-            '<h2>Reserva total</h2>'+
-            `<span class="span-reserva">$${totalReserve}</span>`+
-            '<a class="verRegistros">Ver registros</a>'+
-        '</div>'+
-        '<div id="div-accounts">'+
-            '<h2>Cuentas</h2>'+
-            `<table id="tabla-DatosPrincipales">${accounts}</table>`+
-        '</div>';
-    document.querySelector(selector).innerHTML = style+html;
+    const html = `
+        <div id="div-reserva">
+            <h2>Reserva total</h2>
+            <span class="span-reserva">$${totalReserve}</span>
+            <div onclick="showRecordsSection('#div-sections')" class="verRegistros">Ver registros</div>
+        </div>
+        <div id="div-accounts">
+            <h2>Cuentas</h2>
+            <table id="tabla-DatosPrincipales">${accounts}</table>
+        </div>`;
+    document.querySelector(selector).innerHTML = html;
 }
